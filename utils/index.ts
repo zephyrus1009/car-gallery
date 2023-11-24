@@ -41,14 +41,14 @@ export const deleteSearchParams = (type: string) => {
 
   return newPathname;
 };
-
+//function này có tác dụng kết nối với car ninja api để lấy thông tin về car (không có images)
 export async function fetchCars(filters: FilterProps) {
   const { manufacturer, year, model, limit, fuel } = filters;
 
   // Set the required headers for the API request
   const headers: HeadersInit = {
-    "X-RapidAPI-Key": process.env.NEXT_PUBLIC_RAPID_API_KEY || "",
-    "X-RapidAPI-Host": "cars-by-api-ninjas.p.rapidapi.com",
+    'X-RapidAPI-Key': 'b295eb2676msh2109bd2acb6170bp11d8c2jsnb84c85e5db24' || '',
+		'X-RapidAPI-Host': 'cars-by-api-ninjas.p.rapidapi.com'
   };
 
   // Set the required headers for the API request
@@ -65,11 +65,14 @@ export async function fetchCars(filters: FilterProps) {
   return result;
 }
 
+// function này có tác dụng kết nối với imagin studio api để lấy ảnh về car.
 export const generateCarImageUrl = (car: CarProps, angle?: string) => {
+  //vì api này có thể giả về ảnh car nhìn từ các góc khác nhau, nên ta cần thêm angle vào url khi muốn gọi góc nào đó. Do đó, ta thêm angle vào hàm để gọi cho tiện.
   const url = new URL("https://cdn.imagin.studio/getimage");
   const { make, model, year } = car;
 
-  url.searchParams.append('customer', process.env.NEXT_PUBLIC_IMAGIN_API_KEY || '');
+  url.searchParams.append('customer', 'hrjavascript-mastery' || '');
+  // đoạn customer này là tương ứng phải điền key lấy được từ web, nhưng nó không cho (vì yêu cầu email công ty, website...) nên phải dùng tạm key của javascript mastery. Muốn lấy key còn hiệu lực thì vào gistcode tại link: https://gist.github.com/adrianhajdin/e41751d170881f32955f556aaa45c77c
   url.searchParams.append('make', make);
   url.searchParams.append('modelFamily', model.split(" ")[0]);
   url.searchParams.append('zoomType', 'fullscreen');

@@ -1,4 +1,5 @@
 // file này dùng để tạo component carcard
+// carcard có nhiệm vụ hiển thị thông tin về car.
 "use client";
 
 import { useState } from "react";
@@ -21,7 +22,7 @@ const CarCard = ({ car }: CarCardProps) => {
   const { city_mpg, year, make, model, transmission, drive } = car;
 // dùng destructuring assignment để extract các properties từ car.
   const [isOpen, setIsOpen] = useState(false);
-
+// state isOpen để track trạng thái user có bấm vào nút viewmore không
   const carRent = calculateCarRent(city_mpg, year);
 
   return (
@@ -60,6 +61,7 @@ const CarCard = ({ car }: CarCardProps) => {
           </div>
         </div>
 
+{/* dùng component custombutton để tạo một nút viewmore ở carcard, tức là bấm vào thì sẽ ra hiện ra chi tiết hơn: ảnh to hơn, nhiều info hơn. */}
         <div className="car-card__btn-container">
           <CustomButton
             title='View More'
@@ -67,10 +69,13 @@ const CarCard = ({ car }: CarCardProps) => {
             textStyles='text-white text-[14px] leading-[17px] font-bold'
             rightIcon='/right-arrow.svg'
             handleClick={() => setIsOpen(true)}
+            // khi bấm vào thì sẽ đổi state isOpen thành true
           />
         </div>
       </div>
 
+{/* đây là component dùng để hiển thị chi tiết cho Carcard, nên nó cần có prop car. Nó sẽ hiện ra khi bấm vào nút viewmore ở carcard. */}
+{/* Vì khi nó close thì state isOpen của carCard phải được set lại, nên nó cần có thêm một prop là closemodal có tác dụng gọi setIsOpen để set lại state isOpen. */}
       <CarDetails isOpen={isOpen} closeModal={() => setIsOpen(false)} car={car} />
     </div>
   );
