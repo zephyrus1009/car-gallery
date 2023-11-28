@@ -9,6 +9,8 @@ import SearchManufacturer from "./SearchManufacturer";
 //component này ta muốn tuỳ biến style cho nó (có giao diện khác nhau tuỳ lúc)
 // do đó,  tailwind css sẽ được pass từ SearchBar sang dưới dạng prop với tên là
 // otherClasses
+//SearchButton này chỉ được dùng bởi SearchBar mà thôi, nên ta không cần tạo nó trong folder components mà tạo luôn trong file này là tiện
+// ta thấy SearchButton này không cần có onclick hay gì, vì bản chất nó được dùng trong form, và type của nó là submit, thế là đủ.
 const SearchButton = ({ otherClasses }: { otherClasses: string }) => (
   // style của button được lấy từ otherClasses
   <button type='submit' className={`-ml-3 z-10 ${otherClasses}`}>
@@ -41,7 +43,7 @@ const SearchBar = () => {
 // đại biểu cho Form event.
 // ta lôi e vào hàm handleSearch ở đây để có thể dùng e.prevenDefault
 // vì ở đây, ta không muốn dùng form như đúng công dụng của nó
-// nên cần preven default behavior của nó khi được submit. 
+// nên cần preven default behavior của nó khi được submit. default behavior của form là refresh mỗi khi submit, nên sẽ làm mất dữ liệu đang có. 
   const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -49,7 +51,7 @@ const SearchBar = () => {
       return alert("Please provide some input");
     }
     //The trim() method removes whitespace from both ends of a string and returns the new string without the whitespace. If the string is empty or contains only whitespace, trim() returns an empty string
-    // check xem input có phải empty không
+    // check xem input có phải empty không (user không gõ gì vào searchbar mà vẫn nhấn search)
 
     // nếu không empty thì biến tất thành lowercase rồi gọi hàm updateSarchparams để thay đổi giá trị URL. 
     updateSearchParams(model.toLowerCase(), manufacturer.toLowerCase());
@@ -78,6 +80,7 @@ const SearchBar = () => {
     const newPathname = `${window.location.pathname}?${searchParams.toString()}`;
 
     router.push(newPathname);
+    // tính đến 27/11 thì nextjs 13 đang bị lỗi một chút phần router.push này. sau khi update với router.push thì current view sẽ bị load lên từ đầu trang không còn ở current position, làm cho trải nghiệm hơi khó chịu.
   };
 
   return (

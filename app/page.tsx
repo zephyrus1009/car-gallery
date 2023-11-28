@@ -13,7 +13,7 @@ export default async function Home({ searchParams }: HomeProps) {
     limit: searchParams.limit || 10,
     model: searchParams.model || "",
   });
-// Giá trị sẽ được lấy từ searchParams ra, hoặc dùng các giá trị mặc định.
+// Giá trị sẽ được lấy từ searchParams ra, hoặc dùng các giá trị mặc định nếu searchParams không có gì.
 
   const isDataEmpty = !Array.isArray(allCars) || allCars.length < 1 || !allCars;
 // isDataEmpty sẽ true khi ít nhất một trong 3 điều kiện đúng
@@ -30,6 +30,7 @@ export default async function Home({ searchParams }: HomeProps) {
         <div className='home__filters'>
           <SearchBar />
 
+{/* ngoài SearchBar là chính để tìm theo manufacturer và model, thì sẽ làm thêm 2 filter phụ tìm theo fuel và year. */}
           <div className='home__filter-container'>
             <CustomFilter title='fuel' options={fuels} />
             <CustomFilter title='year' options={yearsOfProduction} />
@@ -43,7 +44,9 @@ export default async function Home({ searchParams }: HomeProps) {
                 <CarCard car={car} />
               ))}
             </div>
-
+{/* về cơ bản thì dữ liệu có thể giả về từ API rất nhiều, tuy nhiên ta không muốn hiển thị tất cái đống này lên được vì viewport có hạn. */}
+{/* do đó, URL có một parameter là limit. Ta thiết lập limit thì API sẽ chỉ giả về tối đa là từng đó data. Do đó, ta có render all ra thì cũng chỉ max là limit. */}
+{/* Còn nếu muốn hiển thị nhiều hơn, thì ta thay đổi limit này, và rút nhiều data hơn từ API về, và sẽ hiển thị nhiều lên. */}
             <ShowMore
               pageNumber={(searchParams.limit || 10) / 10}
               isNext={(searchParams.limit || 10) > allCars.length}
